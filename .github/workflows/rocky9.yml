@@ -8,9 +8,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - name: rocky
+          - name: rocky
+            version: 9.2
+          - name: rocky
+            version: 9
+          - name: centos
+          - name: centos
+            version: 8.5
+          - name: centos
+            version: 8
+          - name: alma
+          - name: alma
+            version: 9.2
+          - name: alma
+            version: 9
 
     steps:
       - uses: systemd/mkosi@eaf9b8bc5f6140b3543f2f09f25dc593f496b95e
 
       - name: Run mkosi
-        run: mkosi --distribution rocky --release 9.2 --debug build
+        if: matrix.distro.version
+        run: mkosi --distribution ${{ matrix.distro.name }} --release ${{ matrix.distro.version }} --debug build --force
+
+      - name: Run mkosi
+        if: matrix.distro.version == ''
+        run: mkosi --distribution ${{ matrix.distro.name }} --debug build --force
