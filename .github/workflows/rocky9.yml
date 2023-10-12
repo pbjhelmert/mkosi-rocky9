@@ -1,0 +1,16 @@
+---
+name: Test rocky 9.2 builds in mkosi
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: systemd/mkosi@eaf9b8bc5f6140b3543f2f09f25dc593f496b95e
+
+      - name: Run mkosi
+        run: mkosi --distribution rocky --release 9.2 --debug build
